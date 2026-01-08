@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goklat 945 - Order Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+      * {
+        font-family: "Poppins", sans-serif;
+        box-sizing: border-box;
+      }
+
+      .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+      }
+      .product-card:hover:not(.disabled) {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+
+      .whatsapp-btn {
+        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+        transition: all 0.3s ease;
+      }
+      .whatsapp-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+      }
+
+      /* Perbaikan transisi drop-down kategori */
+      .category-content {
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.3s ease, padding 0.3s ease, visibility 0.4s;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+
+      .category-content.open {
+        max-height: 5000px; /* Nilai besar agar konten panjang tertampung */
+        opacity: 1;
+        visibility: visible;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+      }
+
+      .rotate-icon {
+        transition: transform 0.3s ease;
+      }
+      .rotate-icon.open {
+        transform: rotate(180deg);
+      }
+
+      .sold-out-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-15deg);
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #5b21b6;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 h-full w-full overflow-auto">
+    <div id="app" class="w-full min-h-full">
+      <div class="flex flex-col items-center justify-center h-screen">
+        <div class="loader mb-4"></div>
+        <p class="text-purple-900 font-semibold text-center px-4">
+          Memuat Menu Goklat...
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const config = {
+        store_title: "Goklat 945",
+        store_address: "Batang Ayumi Julu, Padang Sidempuan Utara",
+        whatsapp_number: "6282277647548",
+        primary_color: "#5b21b6",
+      };
+
+      const DATA_URL = "Products.json";
+
+      const locationData = {
+        "Padangsidimpuan Utara": {
+          "Batang Ayumi Julu": 2000,
+          "Batang Ayumi Jae": 2000,
+          Baringin: 3000,
+          "Bonan Dolok": 3000,
+          Kantor: 3000,
+          "Losung Batu": 3000,
+          "Pancuran Gerobak": 3000,
+          Sadabuan: 5000,
+          Sibatua: 5000,
+          Timbangan: 5000,
+          "Wek I": 3000,
+          "Wek II": 3000,
+          "Wek III": 3000,
+          "Wek IV": 3000,
+        },
+        "Padangsidimpuan Selatan": {
+          "Aek Tampang": 5000,
+          Hanopan: 5000,
+          Losung: 5000,
+          "Padang Matinggi": 5000,
+          "Padang Matinggi Lestari": 5000,
+          Sidangkal: 5000,
+          Sihitang: 8000,
+          Sitinjak: 8000,
+          "Ujung Padang": 5000,
+          "Wek V": 3000,
+          "Wek VI": 3000,
+        },
+        "Padangsidimpuan Tenggara": {
+          "Labuhan Labo": 8000,
+          "Labuhan Rasoki": 10000,
+          "Manunggang Jae": 8000,
+          "Manunggang Julu": 8000,
+          "Palopat Maria": 8000,
+          "Purbatua Pijor Koling": 10000,
+          "Sihitang Jae": 8000,
+          "Pijor Koling": 10000,
+        },
+        "Padangsidimpuan Batunadua": {
+          "Batunadua Jae": 8000,
+          "Batunadua Julu": 8000,
+          "Batu Gajah": 8000,
+          "Pudun Jae": 8000,
+          "Pudun Julu": 8000,
+          Siloting: 10000,
+          Simirik: 8000,
+          "Ujung Gurap": 8000,
+        },
+        "Padangsidimpuan Hutaimbaru": {
+          Hutaimbaru: 8000,
+          "Lembah Lubuk Raya": 10000,
+          "Sabungan Sipabangun": 10000,
+          Singali: 10000,
+          Talippung: 10000,
+        },
+        "Padangsidimpuan Angkola Julu": {
+          Batuayan: 12000,
+          "Joring Lombang": 12000,
+          "Joring Natobang": 12000,
+          Mombang: 12000,
+          "Pintu Langit Jae": 12000,
+          Simasom: 12000,
+        },
+      };
+
+      let categories = {};
+      let cart = [];
+      let openCategories = {};
+      let selectedKecamatan = "";
+      let selectedKelurahan = "";
+      let currentShippingFee = 0;
+
+      async function loadProducts() {
+        const timestamp = new Date().getTime();
+        const fetchUrl = `${DATA_URL}?v=${timestamp}`;
+
+        try {
+          const response = await fetch(fetchUrl);
+
+          if (!response.ok) {
+            throw new Error(
+              `Server merespon dengan status: ${response.status}`
+            );
+          }
+
+          const rawText = await response.text();
+
+          try {
+            categories = JSON.parse(rawText);
+          } catch (parseError) {
+            console.error("Detail Error JSON:", parseError);
+            throw new Error(`Format file JSON salah: ${parseError.message}.`);
+          }
+
+          if (!categories || Object.keys(categories).length === 0) {
+            throw new Error(
+              "File JSON berhasil dimuat, tetapi tidak ada data menu di dalamnya."
+            );
+          }
+
+          const keys = Object.keys(categories);
+          keys.forEach((key) => {
+            if (openCategories[key] === undefined) {
+              openCategories[key] = false;
+            }
+          });
+
+          renderApp();
+        } catch (error) {
+          document.getElementById("app").innerHTML = `
+          <div class="flex flex-col items-center justify-center h-screen p-6 text-center bg-white">
+            <div class="text-red-500 text-5xl mb-4">⚠️</div>
+            <p class="text-red-600 font-bold mb-2 text-xl">Kesalahan Database Menu</p>
+            <div class="text-gray-500 text-sm max-w-md mb-6 bg-red-50 p-4 rounded-lg border border-red-100 text-left">
+              <p class="font-bold text-red-700 mb-1">Pesan Error:</p>
+              <p class="mb-3 italic text-red-600">${error.message}</p>
+            </div>
+            <button onclick="location.reload()" class="px-8 py-3 bg-purple-600 text-white font-bold rounded-xl shadow-lg hover:bg-purple-700 transition">
+              Muat Ulang Halaman
+            </button>
+          </div>
+        `;
+        }
+      }
+
+      function formatCurrency(amount) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+        }).format(amount);
+      }
+
+      function toggleCategory(key) {
+        openCategories[key] = !openCategories[key];
+        renderApp();
+      }
+
+      function addToCart(pid) {
+        let product = null;
+        for (let k in categories) {
+          let found = categories[k].products.find((p) => p.id === pid);
+          if (found) {
+            product = found;
+            break;
+          }
+        }
+        if (!product || product.outOfStock) return;
+
+        const item = cart.find((i) => i.id === pid);
+        if (item) {
+          item.qty++;
+        } else {
+          cart.push({ ...product, qty: 1 });
+        }
+        renderApp();
+      }
+
+      function updateQty(pid, delta) {
+        const item = cart.find((i) => i.id === pid);
+        if (item) {
+          item.qty += delta;
+          if (item.qty <= 0) cart = cart.filter((i) => i.id !== pid);
+        }
+        renderApp();
+      }
+
+      function handleLocationChange(kec, kel) {
+        selectedKecamatan = kec;
+        selectedKelurahan = kel;
+        currentShippingFee = kec && kel ? locationData[kec][kel] : 0;
+        renderApp();
+      }
+
+      function sendToWhatsApp(e) {
+        e.preventDefault();
+        const f = e.target;
+        const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const total = subtotal + currentShippingFee;
+
+        let msg = `*PESANAN BARU - ${config.store_title}*\n\n`;
+        cart.forEach(
+          (i) =>
+            (msg += `• ${i.name} (x${i.qty}) - ${formatCurrency(
+              i.price * i.qty
+            )}\n`)
+        );
+        msg += `\n*Subtotal:* ${formatCurrency(subtotal)}`;
+        msg += `\n*Ongkir:* ${formatCurrency(currentShippingFee)}`;
+        msg += `\n*Total Bayar:* ${formatCurrency(total)}\n\n`;
+        msg += `*Detail Pengiriman:*\nNama: ${f.name.value}\nWA: ${f.phone.value}\nAlamat: ${f.address.value}\nLokasi: ${selectedKelurahan}, ${selectedKecamatan}`;
+
+        window.open(
+          `https://wa.me/${config.whatsapp_number}?text=${encodeURIComponent(
+            msg
+          )}`,
+          "_blank"
+        );
+      }
+
+      function renderApp() {
+        const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const total = subtotal + currentShippingFee;
+
+        document.getElementById("app").innerHTML = `
+        <div class="max-w-4xl mx-auto px-4 py-8">
+          <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-purple-900 mb-2">${
+              config.store_title
+            }</h1>
+            <p class="text-gray-600">${config.store_address}</p>
+          </header>
+
+          <div class="space-y-6">
+            ${Object.keys(categories)
+              .map((key) => {
+                const cat = categories[key];
+                const isOpen = openCategories[key];
+                const productCount = cat.products.length;
+                const outOfStockCount = cat.products.filter(
+                  (p) => p.outOfStock
+                ).length;
+
+                return `
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div onclick="toggleCategory('${key}')" class="p-5 bg-purple-50 flex justify-between items-center cursor-pointer hover:bg-purple-100 transition relative z-20">
+                    <div class="flex items-center gap-3">
+                      <span class="text-2xl">${cat.icon || "🥤"}</span>
+                      <div>
+                        <h2 class="text-xl font-bold text-purple-900 leading-tight">${
+                          cat.name
+                        }</h2>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                           <span class="text-[10px] font-bold bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full uppercase tracking-wider italic">
+                             ${productCount} Menu
+                           </span>
+                           ${
+                             outOfStockCount > 0
+                               ? `
+                           <span class="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider italic">
+                             ${outOfStockCount} Stok Habis
+                           </span>
+                           `
+                               : ""
+                           }
+                        </div>
+                      </div>
+                    </div>
+                    <svg class="rotate-icon ${
+                      isOpen ? "open" : ""
+                    }" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+                  <div class="category-content ${
+                    isOpen ? "open" : ""
+                  } px-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    ${cat.products
+                      .map((p) => {
+                        const inCart = cart.find((i) => i.id === p.id);
+                        return `
+                        <div class="product-card border rounded-xl p-3 text-center bg-white ${
+                          p.outOfStock ? "opacity-60" : ""
+                        }">
+                          ${
+                            p.outOfStock
+                              ? `<div class="sold-out-badge">HABIS</div>`
+                              : ""
+                          }
+                          <div class="w-full h-32 overflow-hidden rounded-lg mb-2 flex items-center justify-center bg-gray-50">
+                            <img src="${
+                              p.image
+                            }" class="max-h-full max-w-full object-contain" onerror="this.src='https://placehold.co/200x200/5b21b6/ffffff?text=Menu'">
+                          </div>
+                          <h3 class="text-xs font-bold h-8 overflow-hidden mb-1 text-gray-800">${
+                            p.name
+                          }</h3>
+                          <p class="text-purple-700 font-bold text-sm mb-3">${formatCurrency(
+                            p.price
+                          )}</p>
+                          ${
+                            p.outOfStock
+                              ? `<button disabled class="w-full py-2 bg-gray-200 text-gray-500 rounded-lg text-xs font-bold cursor-not-allowed">Stok Habis</button>`
+                              : inCart
+                              ? `<div class="flex items-center justify-between bg-purple-100 rounded-lg p-1">
+                                <button onclick="updateQty(${p.id}, -1)" class="w-7 h-7 bg-purple-600 text-white rounded-md font-bold shadow-sm hover:bg-purple-700 transition">-</button>
+                                <span class="font-bold text-purple-900">${inCart.qty}</span>
+                                <button onclick="updateQty(${p.id}, 1)" class="w-7 h-7 bg-purple-600 text-white rounded-md font-bold shadow-sm hover:bg-purple-700 transition">+</button>
+                              </div>`
+                              : `<button onclick="addToCart(${p.id})" class="w-full py-2 bg-purple-600 text-white rounded-lg text-xs font-bold shadow-md hover:bg-purple-700 transition">Tambah</button>`
+                          }
+                        </div>
+                      `;
+                      })
+                      .join("")}
+                  </div>
+                </div>
+              `;
+              })
+              .join("")}
+          </div>
+
+          ${
+            cart.length > 0
+              ? `
+            <div class="mt-10 bg-white p-6 rounded-3xl shadow-xl border-t-4 border-purple-600">
+              <h3 class="text-xl font-bold mb-6 flex items-center gap-2">🛒 <span>Detail Pemesanan</span></h3>
+              
+              <div class="space-y-3 mb-8 border-b pb-6">
+                <p class="text-xs font-bold text-purple-900 uppercase tracking-widest mb-2">Item Belanja</p>
+                ${cart
+                  .map(
+                    (i) => `
+                  <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-700">${
+                      i.name
+                    } <span class="text-purple-500 font-bold">(x${
+                      i.qty
+                    })</span></span>
+                    <span class="font-bold text-gray-900">${formatCurrency(
+                      i.price * i.qty
+                    )}</span>
+                  </div>
+                `
+                  )
+                  .join("")}
+              </div>
+
+              <form onsubmit="sendToWhatsApp(event)" class="space-y-6">
+                <!-- Bagian Informasi Dasar -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Nama Lengkap</label>
+                    <input type="text" name="name" placeholder="Masukkan nama Anda" required 
+                      class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-50 transition bg-gray-50">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">No. WhatsApp</label>
+                    <input type="tel" name="phone" placeholder="08xxx" required 
+                      class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-purple-600 focus:ring-4 focus:ring-purple-50 transition bg-gray-50">
+                  </div>
+                </div>
+
+                <!-- Bagian Lokasi -->
+                <div class="space-y-1">
+                  <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Wilayah Pengiriman</label>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <select onchange="handleLocationChange(this.value, '')" required
+                      class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:ring-4 focus:ring-purple-50 focus:border-purple-600 transition">
+                      <option value="">-- Pilih Kecamatan --</option>
+                      ${Object.keys(locationData)
+                        .map(
+                          (k) =>
+                            `<option value="${k}" ${
+                              selectedKecamatan === k ? "selected" : ""
+                            }>${k}</option>`
+                        )
+                        .join("")}
+                    </select>
+                    
+                    <select onchange="handleLocationChange(selectedKecamatan, this.value)" ${
+                      !selectedKecamatan ? "disabled" : ""
+                    } required
+                      class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:ring-4 focus:ring-purple-50 focus:border-purple-600 transition disabled:opacity-50">
+                      <option value="">-- Pilih Kelurahan --</option>
+                      ${
+                        selectedKecamatan
+                          ? Object.keys(locationData[selectedKecamatan])
+                              .map(
+                                (kel) =>
+                                  `<option value="${kel}" ${
+                                    selectedKelurahan === kel ? "selected" : ""
+                                  }>${kel}</option>`
+                              )
+                              .join("")
+                          : ""
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Bagian Alamat -->
+                <div class="space-y-1">
+                  <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Alamat Lengkap & Patokan</label>
+                  <textarea name="address" placeholder="Tulis nama jalan, nomor rumah, atau warna pagar..." required 
+                    class="w-full p-3 border border-gray-200 rounded-xl outline-none h-24 focus:border-purple-600 focus:ring-4 focus:ring-purple-50 transition bg-gray-50 resize-none"></textarea>
+                </div>
+
+                <!-- Ringkasan Biaya -->
+                <div class="bg-purple-900 p-5 rounded-2xl text-white shadow-inner">
+                  <div class="space-y-2 mb-4 border-b border-purple-800 pb-4">
+                    <div class="flex justify-between text-xs text-purple-200"><span>Subtotal Produk</span><span>${formatCurrency(
+                      subtotal
+                    )}</span></div>
+                    <div class="flex justify-between text-xs text-purple-200"><span>Ongkos Kirim (${
+                      selectedKelurahan || "-"
+                    })</span><span>${formatCurrency(
+                  currentShippingFee
+                )}</span></div>
+                  </div>
+                  <div class="flex justify-between font-bold text-xl items-center">
+                    <span>Total Bayar</span>
+                    <span class="text-yellow-400">${formatCurrency(
+                      total
+                    )}</span>
+                  </div>
+                </div>
+
+                <button type="submit" class="whatsapp-btn w-full py-4 text-white font-bold rounded-2xl shadow-lg text-lg flex items-center justify-center gap-3">
+                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                  Kirim Pesanan Sekarang
+                </button>
+              </form>
+            </div>
+          `
+              : `
+            <div class="mt-10 p-10 text-center border-2 border-dashed border-gray-300 rounded-3xl">
+               <p class="text-gray-400">Belum ada item yang dipilih</p>
+            </div>
+          `
+          }
+          
+          <footer class="mt-12 text-center text-gray-400 text-xs">
+            &copy; 2026 ${config.store_title} - Digital Ordering System
+          </footer>
+        </div>
+      `;
+      }
+
+      window.onload = loadProducts;
+    </script>
+  </body>
+</html>
