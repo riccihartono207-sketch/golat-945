@@ -10,8 +10,8 @@
     
     * { font-family: 'Poppins', sans-serif; box-sizing: border-box; }
     
-    .product-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); }
+    .product-card { transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; }
+    .product-card:hover:not(.disabled) { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); }
     
     .whatsapp-btn {
       background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
@@ -29,95 +29,89 @@
     .rotate-icon { transition: transform 0.3s ease; }
     .rotate-icon.open { transform: rotate(180deg); }
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .sold-out-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      z-index: 10;
+      pointer-events: none;
     }
-    .cart-slide-in { animation: slideUp 0.3s ease; }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #5b21b6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body class="bg-gray-100 h-full w-full overflow-auto">
-  <div id="app" class="w-full min-h-full"></div>
+  <div id="app" class="w-full min-h-full">
+    <!-- Indikator Loading Awal -->
+    <div class="flex flex-col items-center justify-center h-screen">
+      <div class="loader mb-4"></div>
+      <p class="text-purple-900 font-semibold">Memuat Menu Goklat...</p>
+    </div>
+  </div>
 
   <script>
     const config = {
       store_title: "Goklat 945",
-      whatsapp_number: "082277647548",
-      primary_color: "#5b21b6",
-      background_color: "#f0f4f8"
+      store_address: "Batang Ayumi Julu, Padang Sidempuan Utara",
+      whatsapp_number: "6282277647548",
+      primary_color: "#5b21b6"
     };
 
-    const categories = {
-      tea: {
-        name: "Tea", icon: "☕",
-        products: [
-          { id: 1, name: "APPLE TEA", price: 5000, image: "https://i.ibb.co.com/3yQp78w0/APPLE-TEA.png" },
-          { id: 2, name: "VANILA TEA", price: 5000, image: "https://i.ibb.co.com/cG7mp47/VANILA-TEA.png" },
-          { id: 3, name: "BLACKCURRANT TEA", price: 5000, image: "https://i.ibb.co.com/jZDw7TDm/BLACKCURRANT-TEA.png" },
-          { id: 4, name: "CREAMY MILK TEA", price: 5000, image: "https://i.ibb.co.com/xtcYPhF6/CREAMY-MILK-TEA.png", outOfStock: true },
-          { id: 5, name: "JASMINE TEA", price: 5000, image: "https://i.ibb.co.com/RGrKrRyd/JASMINE-TEA.png" },
-          { id: 6, name: "LEMON HONEY TEA", price: 5000, image: "https://i.ibb.co.com/hJjttwvk/LEMON-HONEY-TEA.png", outOfStock: true },
-          { id: 7, name: "LEMON TEA", price: 5000, image: "https://i.ibb.co.com/TqNkLS53/LEMON-TEA.png", outOfStock: true },
-          { id: 8, name: "LYCHEE TEA", price: 5000, image: "https://i.ibb.co.com/YBV02Fxd/LYCHEE-TEA.png" },
-          { id: 9, name: "MANGO TEA", price: 5000, image: "https://i.ibb.co.com/d3jxM16/MANGO-TEA.png" },
-          { id: 10, name: "MILK TEA", price: 5000, image: "https://i.ibb.co.com/9mFnDShY/MILK-TEA.png", outOfStock: true },
-          { id: 11, name: "PEACH TEA", price: 5000, image: "https://i.ibb.co.com/KjxnMWxP/PEACH-TEA.png" }
-        ]
-      },
-      coco: {
-        name: "Coco", icon: "🍫",
-        products: [
-          { id: 12, name: "DARK COCO", price: 8000, image: "https://i.ibb.co.com/gLQzDVJz/DARK-COCO.png" },
-          { id: 13, name: "CHOCOLATE MILO", price: 8000, image: "https://i.ibb.co.com/21r1yLgC/CHOCOLATE-MILO.png" },
-          { id: 14, name: "CHOCOLATE OREO", price: 8000, image: "https://i.ibb.co.com/yBdhwhRk/CHOCOLATE-OREO.png" },
-          { id: 15, name: "COCO BANANA", price: 8000, image: "https://i.ibb.co.com/fYHNkBDS/COCO-BANANA.png" },
-          { id: 16, name: "COCO BLACK OREAO", price: 8000, image: "https://i.ibb.co.com/gFSK0Nbm/COCO-BLACK-OREAO.png" },
-          { id: 17, name: "COCO CLASSIC", price: 8000, image: "https://i.ibb.co.com/mrCSw2Q9/COCO-CLASSIC.png" },
-          { id: 18, name: "COCO DURIAN", price: 8000, image: "https://i.ibb.co.com/CK5JjdmN/COCO-DURIAN.png" },
-          { id: 19, name: "COCO HALLOWEEN", price: 8000, image: "https://i.ibb.co.com/nMr4j6wn/COCO-HALLOWEEN.png" },
-          { id: 20, name: "COCO KULAKU", price: 8000, image: "https://i.ibb.co.com/JFbssxdc/COCO-KULAKU.png" },
-          { id: 21, name: "COCO LUMER", price: 8000, image: "https://i.ibb.co.com/Xx1LcG6h/COCO-LUMER.png" },
-          { id: 22, name: "COCO MALTINO", price: 8000, image: "https://i.ibb.co.com/j9HWM798/COCO-MALTINO.png" },
-          { id: 23, name: "COCO QUEEN", price: 8000, image: "https://i.ibb.co.com/27fjM1MM/COCO-QUEEN.png" },
-          { id: 24, name: "COCO RED FOREST", price: 8000, image: "https://i.ibb.co.com/Q7bYMsnS/COCO-RED-FOREST.png" },
-          { id: 25, name: "COCO ROCKY TIRAMISU", price: 8000, image: "https://i.ibb.co.com/qY2vkfPY/COCO-ROCKY-TIRAMISU.png" },
-          { id: 26, name: "COCO SIGNATURE", price: 8000, image: "https://i.ibb.co.com/VcWM5J08/COCO-SIGNATURE.png" },
-          { id: 27, name: "COCO TELLA", price: 8000, image: "https://i.ibb.co.com/mQHwdGf/COCO-TELLA.png" },
-          { id: 28, name: "COCO TROUBLE", price: 8000, image: "https://i.ibb.co.com/xd2FGxp/COCO-TROUBLE.png" }
-        ]
-      },
-      coffee: {
-        name: "Coffee", icon: "☕",
-        products: [
-          { id: 29, name: "KOPI YEU VIETNAM", price: 8000, image: "https://i.ibb.co.com/bgj90sWf/KOPI-YEU-VIETNAM.png" },
-          { id: 30, name: "BLACK COFFEE", price: 8000, image: "https://i.ibb.co.com/6c73nd7F/BLACK-COFFEE.png" },
-          { id: 31, name: "COFFEE ALA GOKLAT", price: 8000, image: "https://i.ibb.co.com/fVxswndB/COFFEE-ALA-GOKLAT.png" },
-          { id: 32, name: "COFFEE MILK", price: 8000, image: "https://i.ibb.co.com/QjPg2XzN/COFFEE-MILK.png" },
-          { id: 33, name: "COFFIEE TIRAMISU", price: 8000, image: "https://i.ibb.co.com/d4tN1bCc/COFFIEE-TIRAMISU.png" }
-        ]
-      },
-      sugarfruite: {
-        name: "Sugar & Fruite", icon: "🍓",
-        products: [
-          { id: 34, name: "TARO", price: 8000, image: "https://i.ibb.co.com/8gtDgfhS/TARO.png" },
-          { id: 35, name: "ALPUKAT", price: 8000, image: "https://i.ibb.co.com/tw91m2xg/ALPUKAT.png" },
-          { id: 36, name: "BLOODY VELVET", price: 8000, image: "https://i.ibb.co.com/fVNPmQx5/BLOODY-VELVET.png" },
-          { id: 37, name: "BROWN SUGAR TIRAMISU", price: 8000, image: "https://i.ibb.co.com/21Trcvzb/BROWN-SUGAR-TIRAMISU.png" },
-          { id: 38, name: "BROWN SUGAR VANILLA LAGOAN", price: 8000, image: "https://i.ibb.co.com/s9kjddVS/BROWN-SUGAR-VANILLA-LAGOAN.png" },
-          { id: 39, name: "COOKIES CREAM", price: 8000, image: "https://i.ibb.co.com/43wSjDJ/COOKIES-CREAM.png" },
-          { id: 40, name: "DURIAN", price: 8000, image: "https://i.ibb.co.com/7xKgRQYw/DURIAN.png" },
-          { id: 41, name: "FRESH LIME", price: 8000, image: "https://i.ibb.co.com/JjWy0rdC/FRESH-LIME.png" },
-          { id: 42, name: "LEMONADE", price: 8000, image: "https://i.ibb.co.com/PvcG5MmL/LEMONADE.png" },
-          { id: 43, name: "LYCHEE", price: 8000, image: "https://i.ibb.co.com/NgPmPBP9/LYCHEE.png" },
-          { id: 44, name: "MANGGO TANGO", price: 8000, image: "https://i.ibb.co.com/xq4YsHKF/MANGGO-TANGO.png" },
-          { id: 45, name: "MILK ESPRESSO", price: 8000, image: "https://i.ibb.co.com/4nHqbD0m/MILK-ESPRESSO.png" },
-          { id: 46, name: "STRAWBERRY BELLY", price: 8000, image: "https://i.ibb.co.com/QvgxtJtj/STRAWBERRY-BELLY.png" }
-        ]
-      }
+    const locationData = {
+      "Padangsidimpuan Utara": { "Batang Ayumi Julu": 2000, "Batang Ayumi Jae": 2000, "Baringin": 3000, "Bonan Dolok": 3000, "Kantor": 3000, "Losung Batu": 3000, "Pancuran Gerobak": 3000, "Sadabuan": 5000, "Sibatua": 5000, "Timbangan": 5000, "Wek I": 3000, "Wek II": 3000, "Wek III": 3000, "Wek IV": 3000 },
+      "Padangsidimpuan Selatan": { "Aek Tampang": 5000, "Hanopan": 5000, "Losung": 5000, "Padang Matinggi": 5000, "Padang Matinggi Lestari": 5000, "Sidangkal": 5000, "Sihitang": 8000, "Sitinjak": 8000, "Ujung Padang": 5000, "Wek V": 3000, "Wek VI": 3000 },
+      "Padangsidimpuan Tenggara": { "Labuhan Labo": 8000, "Labuhan Rasoki": 10000, "Manunggang Jae": 8000, "Manunggang Julu": 8000, "Palopat Maria": 8000, "Purbatua Pijor Koling": 10000, "Sihitang Jae": 8000, "Pijor Koling": 10000 },
+      "Padangsidimpuan Batunadua": { "Batunadua Jae": 8000, "Batunadua Julu": 8000, "Batu Gajah": 8000, "Pudun Jae": 8000, "Pudun Julu": 8000, "Siloting": 10000, "Simirik": 8000, "Ujung Gurap": 8000 },
+      "Padangsidimpuan Hutaimbaru": { "Hutaimbaru": 8000, "Lembah Lubuk Raya": 10000, "Sabungan Sipabangun": 10000, "Singali": 10000, "Talippung": 10000 },
+      "Padangsidimpuan Angkola Julu": { "Batuayan": 12000, "Joring Lombang": 12000, "Joring Natobang": 12000, "Mombang": 12000, "Pintu Langit Jae": 12000, "Simasom": 12000 }
     };
 
+    let categories = {};
     let cart = [];
-    let openCategories = { tea: true, coco: false, coffee: false, sugarfruite: false };
+    let openCategories = {};
+    let selectedKecamatan = "";
+    let selectedKelurahan = "";
+    let currentShippingFee = 0;
+
+    // Fungsi Utama Fetch Data dari products.json
+    async function loadProducts() {
+      try {
+        const response = await fetch('products.json');
+        if (!response.ok) throw new Error('Gagal memuat file products.json');
+        
+        categories = await response.json();
+        
+        // Inisialisasi status kategori (tutup semua kecuali yang pertama secara default)
+        Object.keys(categories).forEach((key, index) => {
+          openCategories[key] = index === 0;
+        });
+        
+        renderApp();
+      } catch (error) {
+        console.error("Fetch error:", error);
+        document.getElementById('app').innerHTML = `
+          <div class="flex flex-col items-center justify-center h-screen p-6 text-center">
+            <p class="text-red-600 font-bold mb-2">Oops! Gagal Memuat Data</p>
+            <p class="text-gray-500 text-sm">Pastikan file 'products.json' berada di folder yang sama atau sudah di-upload ke GitHub.</p>
+            <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg">Coba Lagi</button>
+          </div>
+        `;
+      }
+    }
 
     function formatCurrency(amount) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
@@ -134,8 +128,14 @@
         let found = categories[k].products.find(p => p.id === pid);
         if (found) { product = found; break; }
       }
+      if (!product || product.outOfStock) return;
+      
       const item = cart.find(i => i.id === pid);
-      if (item) { item.qty++; } else { cart.push({ ...product, qty: 1 }); }
+      if (item) {
+        item.qty++;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
       renderApp();
     }
 
@@ -148,23 +148,38 @@
       renderApp();
     }
 
-    function sendWhatsApp(e) {
+    function handleLocationChange(kec, kel) {
+      selectedKecamatan = kec;
+      selectedKelurahan = kel;
+      currentShippingFee = (kec && kel) ? locationData[kec][kel] : 0;
+      renderApp();
+    }
+
+    function sendToWhatsApp(e) {
       e.preventDefault();
       const f = e.target;
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const total = subtotal + currentShippingFee;
+
       let msg = `*PESANAN BARU - ${config.store_title}*\n\n`;
-      cart.forEach(i => msg += `• ${i.name} (x${i.qty}) = ${formatCurrency(i.price * i.qty)}\n`);
-      msg += `\n*Total: ${formatCurrency(cart.reduce((s, i) => s + (i.price * i.qty), 0))}*\n\n`;
-      msg += `*Data Pembeli:*\nNama: ${f.name.value}\nWA: ${f.phone.value}\nAlamat: ${f.addr.value}\nKota: ${f.city.value}`;
-      window.open(`https://wa.me/62${config.whatsapp_number.substring(1)}?text=${encodeURIComponent(msg)}`, '_blank');
+      cart.forEach(i => msg += `• ${i.name} (x${i.qty}) - ${formatCurrency(i.price * i.qty)}\n`);
+      msg += `\n*Subtotal:* ${formatCurrency(subtotal)}`;
+      msg += `\n*Ongkir:* ${formatCurrency(currentShippingFee)}`;
+      msg += `\n*Total Bayar:* ${formatCurrency(total)}\n\n`;
+      msg += `*Detail Pengiriman:*\nNama: ${f.name.value}\nAlamat: ${f.address.value}\nLokasi: ${selectedKelurahan}, ${selectedKecamatan}`;
+      
+      window.open(`https://wa.me/${config.whatsapp_number}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     function renderApp() {
-      const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const total = subtotal + currentShippingFee;
+
       document.getElementById('app').innerHTML = `
-        <div class="max-w-4xl mx-auto px-4 py-8" style="background: ${config.background_color}">
+        <div class="max-w-4xl mx-auto px-4 py-8">
           <header class="text-center mb-10">
             <h1 class="text-4xl font-bold text-purple-900 mb-2">${config.store_title}</h1>
-            <p class="text-gray-600">Kesegaran Alami di Setiap Gelas</p>
+            <p class="text-gray-600">${config.store_address}</p>
           </header>
 
           <div class="space-y-6">
@@ -172,32 +187,33 @@
               const cat = categories[key];
               const isOpen = openCategories[key];
               return `
-                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
-                  <div onclick="toggleCategory('${key}')" class="p-5 bg-purple-50 flex justify-between items-center cursor-pointer hover:bg-purple-100 transition">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div onclick="toggleCategory('${key}')" class="p-5 bg-purple-50 flex justify-between items-center cursor-pointer">
                     <div class="flex items-center gap-3">
                       <span class="text-2xl">${cat.icon}</span>
                       <h2 class="text-xl font-bold text-purple-900">${cat.name}</h2>
-                      <span class="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">${cat.products.length} Item</span>
                     </div>
-                    <svg class="rotate-icon ${isOpen ? 'open' : ''}" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    <svg class="rotate-icon ${isOpen ? 'open' : ''}" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                   </div>
                   <div class="category-content ${isOpen ? 'open' : ''} p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                     ${cat.products.map(p => {
                       const inCart = cart.find(i => i.id === p.id);
                       return `
-                        <div class="product-card bg-white border rounded-xl p-3 text-center">
-                          <img src="${p.image}" class="w-full h-32 object-contain mb-3 rounded-lg" onerror="this.src='https://via.placeholder.com/150?text=Goklat'">
-                          <h3 class="text-sm font-bold h-10 overflow-hidden text-gray-800 mb-1">${p.name}</h3>
-                          <p class="text-purple-700 font-bold mb-3">${formatCurrency(p.price)}</p>
+                        <div class="product-card border rounded-xl p-3 text-center ${p.outOfStock ? 'opacity-50' : ''}">
+                          ${p.outOfStock ? `<div class="sold-out-badge">HABIS</div>` : ''}
+                          <img src="${p.image}" class="w-full h-32 object-contain mb-2 rounded-lg" onerror="this.src='https://placehold.co/200x200?text=Menu'">
+                          <h3 class="text-xs font-bold h-8 overflow-hidden mb-1">${p.name}</h3>
+                          <p class="text-purple-700 font-bold text-sm mb-3">${formatCurrency(p.price)}</p>
                           ${p.outOfStock ? 
-                            `<div class="py-2 bg-red-100 text-red-600 text-xs font-bold rounded-lg">Stok Habis</div>` :
-                            inCart ? 
-                            `<div class="flex items-center justify-between bg-purple-100 rounded-lg p-1">
-                              <button onclick="updateQty(${p.id}, -1)" class="w-8 h-8 bg-purple-600 text-white rounded-md font-bold">-</button>
-                              <span class="font-bold text-purple-900">${inCart.qty}</span>
-                              <button onclick="updateQty(${p.id}, 1)" class="w-8 h-8 bg-purple-600 text-white rounded-md font-bold">+</button>
-                            </div>` :
-                            `<button onclick="addToCart(${p.id})" class="w-full py-2 bg-purple-600 text-white rounded-lg text-sm font-bold shadow-md">Tambah</button>`
+                            `<button disabled class="w-full py-2 bg-gray-200 text-gray-500 rounded-lg text-xs font-bold">Stok Habis</button>` :
+                            (inCart ? 
+                              `<div class="flex items-center justify-between bg-purple-100 rounded-lg p-1">
+                                <button onclick="updateQty(${p.id}, -1)" class="w-7 h-7 bg-purple-600 text-white rounded font-bold">-</button>
+                                <span class="font-bold text-purple-900">${inCart.qty}</span>
+                                <button onclick="updateQty(${p.id}, 1)" class="w-7 h-7 bg-purple-600 text-white rounded font-bold">+</button>
+                              </div>` :
+                              `<button onclick="addToCart(${p.id})" class="w-full py-2 bg-purple-600 text-white rounded-lg text-xs font-bold">Tambah</button>`
+                            )
                           }
                         </div>
                       `;
@@ -209,41 +225,53 @@
           </div>
 
           ${cart.length > 0 ? `
-            <div class="cart-slide-in mt-10 bg-white p-6 rounded-3xl shadow-2xl border-t-8 border-purple-600">
-              <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">🛒 Keranjang Belanja</h3>
-              <div class="space-y-3 mb-6">
+            <div class="mt-10 bg-white p-6 rounded-3xl shadow-xl border-t-4 border-purple-600">
+              <h3 class="text-xl font-bold mb-4">🛒 Ringkasan Pesanan</h3>
+              <div class="space-y-3 mb-6 border-b pb-6">
                 ${cart.map(i => `
-                  <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
-                    <span class="font-medium text-gray-700">${i.name} (x${i.qty})</span>
-                    <span class="font-bold text-purple-700">${formatCurrency(i.price * i.qty)}</span>
+                  <div class="flex justify-between items-center text-sm">
+                    <span>${i.name} (x${i.qty})</span>
+                    <span class="font-bold">${formatCurrency(i.price * i.qty)}</span>
                   </div>
                 `).join('')}
               </div>
-              <div class="flex justify-between text-xl font-bold mb-8 p-4 bg-purple-50 rounded-xl">
-                <span>Total Bayar</span>
-                <span class="text-purple-900">${formatCurrency(total)}</span>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="text-xs text-gray-500 mb-1 block">Pilih Kecamatan</label>
+                  <select onchange="handleLocationChange(this.value, '')" class="w-full p-3 border rounded-xl bg-gray-50 outline-none">
+                    <option value="">-- Pilih Kecamatan --</option>
+                    ${Object.keys(locationData).map(k => `<option value="${k}" ${selectedKecamatan === k ? 'selected' : ''}>${k}</option>`).join('')}
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 mb-1 block">Pilih Kelurahan</label>
+                  <select onchange="handleLocationChange(selectedKecamatan, this.value)" ${!selectedKecamatan ? 'disabled' : ''} class="w-full p-3 border rounded-xl bg-gray-50 outline-none">
+                    <option value="">-- Pilih Kelurahan --</option>
+                    ${selectedKecamatan ? Object.keys(locationData[selectedKecamatan]).map(kel => `<option value="${kel}" ${selectedKelurahan === kel ? 'selected' : ''}>${kel}</option>`).join('') : ''}
+                  </select>
+                </div>
               </div>
-              
-              <form onsubmit="sendWhatsApp(event)" class="space-y-4">
-                <input type="text" name="name" placeholder="Nama Lengkap" required class="w-full p-4 border-2 border-gray-100 rounded-xl focus:border-purple-500 outline-none">
-                <input type="tel" name="phone" placeholder="No. WhatsApp (Contoh: 0812...)" required class="w-full p-4 border-2 border-gray-100 rounded-xl focus:border-purple-500 outline-none">
-                <textarea name="addr" placeholder="Alamat Pengiriman Lengkap" required class="w-full p-4 border-2 border-gray-100 rounded-xl focus:border-purple-500 outline-none h-24"></textarea>
-                <input type="text" name="city" placeholder="Kota" value="Padang Sidempuan" required class="w-full p-4 border-2 border-gray-100 rounded-xl focus:border-purple-500 outline-none">
-                <button type="submit" class="whatsapp-btn w-full py-5 text-white font-bold rounded-2xl text-lg shadow-xl flex items-center justify-center gap-3">
-                   Kirim Pesanan ke WhatsApp
-                </button>
+
+              <div class="bg-purple-50 p-4 rounded-2xl mb-6 space-y-2">
+                <div class="flex justify-between text-sm"><span>Subtotal</span><span>${formatCurrency(subtotal)}</span></div>
+                <div class="flex justify-between text-sm"><span>Ongkos Kirim</span><span>${formatCurrency(currentShippingFee)}</span></div>
+                <div class="flex justify-between font-bold text-lg pt-2 border-t border-purple-200"><span>Total</span><span>${formatCurrency(total)}</span></div>
+              </div>
+
+              <form onsubmit="sendToWhatsApp(event)" class="space-y-4">
+                <input type="text" name="name" placeholder="Nama Lengkap" required class="w-full p-4 border rounded-xl outline-none focus:border-purple-600">
+                <textarea name="address" placeholder="Alamat Detail (No. Rumah / Patokan)" required class="w-full p-4 border rounded-xl outline-none h-24 focus:border-purple-600"></textarea>
+                <button type="submit" class="whatsapp-btn w-full py-4 text-white font-bold rounded-2xl shadow-lg">Pesan Sekarang</button>
               </form>
             </div>
-          ` : `
-            <div class="mt-10 text-center py-10 bg-white rounded-3xl shadow-inner border-2 border-dashed border-gray-200">
-              <p class="text-gray-400">Keranjang Anda masih kosong. Silakan pilih menu di atas.</p>
-            </div>
-          `}
+          ` : ''}
         </div>
       `;
     }
 
-    renderApp();
+    // Jalankan aplikasi
+    window.onload = loadProducts;
   </script>
 </body>
 </html>
