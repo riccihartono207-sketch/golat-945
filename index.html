@@ -18,15 +18,9 @@
         animation: floating 3s ease-in-out infinite;
       }
       @keyframes floating {
-        0% {
-          transform: translate(0, 0px);
-        }
-        50% {
-          transform: translate(0, 15px);
-        }
-        100% {
-          transform: translate(0, -0px);
-        }
+        0% { transform: translate(0, 0px); }
+        50% { transform: translate(0, 15px); }
+        100% { transform: translate(0, -0px); }
       }
 
       /* Background Pattern saat Tutup */
@@ -89,12 +83,8 @@
         animation: spin 1s linear infinite;
       }
       @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
 
       /* Modal Animation */
@@ -102,62 +92,28 @@
         animation: modalBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       @keyframes modalBounce {
-        0% {
-          opacity: 0;
-          transform: scale(0.8) translateY(20px);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-        }
+        0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
       }
 
-      /* Hide Scrollbar for Chrome, Safari and Opera */
-      ::-webkit-scrollbar {
-        display: none;
-      }
-      html {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
+      /* Hide Scrollbar */
+      ::-webkit-scrollbar { display: none; }
+      html { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
   </head>
   <body class="h-full w-full overflow-auto bg-gray-50" id="body-main">
     <!-- Pop-up Modal Reload -->
-    <div
-      id="reload-modal"
-      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
-    >
-      <div
-        class="bg-white w-full max-w-sm rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl modal-enter border-4 border-purple-100 mx-auto"
-      >
+    <div id="reload-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+      <div class="bg-white w-full max-w-sm rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl modal-enter border-4 border-purple-100 mx-auto">
         <div class="p-6 sm:p-8 text-center">
           <div class="text-5xl sm:text-6xl mb-4 floating">🔄</div>
-          <h2
-            class="text-xl sm:text-2xl font-extrabold text-purple-900 mb-2 italic"
-          >
-            Cek Stok Baru?
-          </h2>
-          <div
-            class="bg-purple-50 p-4 rounded-2xl mb-6 border-2 border-dashed border-purple-200"
-          >
-            <p class="text-purple-800 font-medium text-sm sm:text-base">
-              "Yuk Reload sekali aja, siapa tau ada stok baru!!"
-            </p>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-purple-900 mb-2 italic">Cek Stok Baru?</h2>
+          <div class="bg-purple-50 p-4 rounded-2xl mb-6 border-2 border-dashed border-purple-200">
+            <p class="text-purple-800 font-medium text-sm sm:text-base">"Yuk Reload sekali aja, siapa tau ada stok baru!!"</p>
           </div>
           <div class="flex flex-col gap-3">
-            <button
-              onclick="location.reload()"
-              class="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-lg shadow-purple-200 transition-all active:scale-95 text-sm sm:text-base"
-            >
-              🔄 Reload Halaman
-            </button>
-            <button
-              onclick="closeModal()"
-              class="w-full py-2 text-gray-400 hover:text-gray-600 font-semibold transition-colors text-sm"
-            >
-              Nanti Saja (Close)
-            </button>
+            <button onclick="location.reload()" class="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-lg shadow-purple-200 transition-all active:scale-95 text-sm sm:text-base">🔄 Reload Halaman</button>
+            <button onclick="closeModal()" class="w-full py-2 text-gray-400 hover:text-gray-600 font-semibold transition-colors text-sm">Nanti Saja (Close)</button>
           </div>
         </div>
       </div>
@@ -166,21 +122,18 @@
     <div id="app" class="w-full min-h-full">
       <div class="flex flex-col items-center justify-center h-screen">
         <div class="loader mb-4"></div>
-        <p class="text-purple-900 font-semibold text-center px-4">
-          Memuat Menu Goklat...
-        </p>
+        <p class="text-purple-900 font-semibold text-center px-4">Memuat Menu Goklat...</p>
       </div>
     </div>
 
     <script>
-      // ============================================================
+======================================
       // PENGATURAN TUTUP MENDADAK
       // BUKA =false
       // TUTUP = true
+=====================================
 
-      // ============================================================
       const tutupMendadak = false;
-      // ============================================================
 
       const config = {
         store_title: "Goklat 945",
@@ -190,76 +143,18 @@
         opening_hours_text: "Senin - Jumat | 09.00 - 17.00",
         op_days: [1, 2, 3, 4, 5],
         op_start: 9,
-        op_end: 20,
+        op_end: 22,
       };
 
       const DATA_URL = "Products.json";
 
       const locationData = {
-        "Padangsidimpuan Utara": {
-          "Batang Ayumi Julu": 2000,
-          "Batang Ayumi Jae": 2000,
-          Baringin: 3000,
-          "Bonan Dolok": 3000,
-          Kantor: 3000,
-          "Losung Batu": 3000,
-          "Pancuran Gerobak": 3000,
-          Sadabuan: 5000,
-          Sibatua: 5000,
-          Timbangan: 5000,
-          "Wek I": 3000,
-          "Wek II": 3000,
-          "Wek III": 3000,
-          "Wek IV": 3000,
-        },
-        "Padangsidimpuan Selatan": {
-          "Aek Tampang": 5000,
-          Hanopan: 5000,
-          Losung: 5000,
-          "Padang Matinggi": 5000,
-          "Padang Matinggi Lestari": 5000,
-          Sidangkal: 5000,
-          Sihitang: 8000,
-          Sitinjak: 8000,
-          "Ujung Padang": 5000,
-          "Wek V": 3000,
-          "Wek VI": 3000,
-        },
-        "Padangsidimpuan Tenggara": {
-          "Labuhan Labo": 8000,
-          "Labuhan Rasoki": 10000,
-          "Manunggang Jae": 8000,
-          "Manunggang Julu": 8000,
-          "Palopat Maria": 8000,
-          "Purbatua Pijor Koling": 10000,
-          "Sihitang Jae": 8000,
-          "Pijor Koling": 10000,
-        },
-        "Padangsidimpuan Batunadua": {
-          "Batunadua Jae": 8000,
-          "Batunadua Julu": 8000,
-          "Batu Gajah": 8000,
-          "Pudun Jae": 8000,
-          "Pudun Julu": 8000,
-          Siloting: 10000,
-          Simirik: 8000,
-          "Ujung Gurap": 8000,
-        },
-        "Padangsidimpuan Hutaimbaru": {
-          Hutaimbaru: 8000,
-          "Lembah Lubuk Raya": 10000,
-          "Sabungan Sipabangun": 10000,
-          Singali: 10000,
-          Talippung: 10000,
-        },
-        "Padangsidimpuan Angkola Julu": {
-          Batuayan: 12000,
-          "Joring Lombang": 12000,
-          "Joring Natobang": 12000,
-          Mombang: 12000,
-          "Pintu Langit Jae": 12000,
-          Simasom: 12000,
-        },
+        "Padangsidimpuan Utara": { "Batang Ayumi Julu": 2000, "Batang Ayumi Jae": 2000, Baringin: 3000, "Bonan Dolok": 3000, Kantor: 3000, "Losung Batu": 3000, "Pancuran Gerobak": 3000, Sadabuan: 5000, Sibatua: 5000, Timbangan: 5000, "Wek I": 3000, "Wek II": 3000, "Wek III": 3000, "Wek IV": 3000 },
+        "Padangsidimpuan Selatan": { "Aek Tampang": 5000, Hanopan: 5000, Losung: 5000, "Padang Matinggi": 5000, "Padang Matinggi Lestari": 5000, Sidangkal: 5000, Sihitang: 8000, Sitinjak: 8000, "Ujung Padang": 5000, "Wek V": 3000, "Wek VI": 3000 },
+        "Padangsidimpuan Tenggara": { "Labuhan Labo": 8000, "Labuhan Rasoki": 10000, "Manunggang Jae": 8000, "Manunggang Julu": 8000, "Palopat Maria": 8000, "Purbatua Pijor Koling": 10000, "Sihitang Jae": 8000, "Pijor Koling": 10000 },
+        "Padangsidimpuan Batunadua": { "Batunadua Jae": 8000, "Batunadua Julu": 8000, "Batu Gajah": 8000, "Pudun Jae": 8000, "Pudun Julu": 8000, Siloting: 10000, Simirik: 8000, "Ujung Gurap": 8000 },
+        "Padangsidimpuan Hutaimbaru": { Hutaimbaru: 8000, "Lembah Lubuk Raya": 10000, "Sabungan Sipabangun": 10000, Singali: 10000, Talippung: 10000 },
+        "Padangsidimpuan Angkola Julu": { Batuayan: 12000, "Joring Lombang": 12000, "Joring Natobang": 12000, Mombang: 12000, "Pintu Langit Jae": 12000, Simasom: 12000 }
       };
 
       let categories = {};
@@ -268,6 +163,13 @@
       let selectedKecamatan = "";
       let selectedKelurahan = "";
       let currentShippingFee = 0;
+
+      // State penampung data form agar tidak reset saat render ulang
+      let formData = {
+        name: "",
+        phone: "",
+        address: ""
+      };
 
       function closeModal() {
         const modal = document.getElementById("reload-modal");
@@ -280,11 +182,7 @@
         const now = new Date();
         const day = now.getDay();
         const hour = now.getHours();
-        return (
-          config.op_days.includes(day) &&
-          hour >= config.op_start &&
-          hour < config.op_end
-        );
+        return (config.op_days.includes(day) && hour >= config.op_start && hour < config.op_end);
       }
 
       async function loadProducts() {
@@ -292,7 +190,6 @@
           renderClosedState();
           return;
         }
-
         const timestamp = new Date().getTime();
         try {
           const response = await fetch(`${DATA_URL}?v=${timestamp}`);
@@ -304,19 +201,14 @@
           });
           renderApp();
         } catch (error) {
-          document.getElementById(
-            "app"
-          ).innerHTML = `<div class="p-10 text-center text-red-600 font-bold">${error.message}</div>`;
+          document.getElementById("app").innerHTML = `<div class="p-10 text-center text-red-600 font-bold">${error.message}</div>`;
         }
       }
 
       function renderClosedState() {
         const modal = document.getElementById("reload-modal");
         if (modal) modal.style.display = "none";
-
-        document.getElementById("body-main").className =
-          "bg-pattern h-full flex items-center justify-center p-6";
-
+        document.getElementById("body-main").className = "bg-pattern h-full flex items-center justify-center p-6";
         document.getElementById("app").innerHTML = `
           <div class="max-w-md w-full bg-white rounded-[2.5rem] sm:rounded-[3rem] shadow-2xl overflow-hidden border-4 border-purple-200 animate-in fade-in zoom-in duration-500 mx-auto">
             <div class="p-6 sm:p-8 text-center">
@@ -328,16 +220,9 @@
               <div class="space-y-4">
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-purple-900 leading-tight tracking-tighter uppercase">PENGUMUMAN</h1>
                 <div class="bg-purple-50 rounded-2xl p-4 sm:p-6 border-2 border-dashed border-purple-300">
-                  <p class="text-base sm:text-lg text-purple-800 font-semibold leading-relaxed italic">
-                    "Maaf hari ini Tokoh Goklat 945 tutup, terimakasih atas kunjungannya"
-                  </p>
+                  <p class="text-base sm:text-lg text-purple-800 font-semibold leading-relaxed italic">"Maaf hari ini Tokoh Goklat 945 tutup, terimakasih atas kunjungannya"</p>
                 </div>
                 <p class="text-gray-500 text-xs sm:text-sm font-medium">Sampai jumpa di hari berikutnya! Kami akan segera kembali melayani pesanan Anda dengan penuh rasa coklat.</p>
-              </div>
-              <div class="flex justify-center gap-2 mt-6 sm:mt-8">
-                <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-600"></div>
-                <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-400"></div>
-                <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-200"></div>
               </div>
             </div>
             <div class="bg-purple-900 py-3 sm:py-4 text-center">
@@ -348,11 +233,7 @@
       }
 
       function formatCurrency(amount) {
-        return new Intl.NumberFormat("id-ID", {
-          style: "currency",
-          currency: "IDR",
-          minimumFractionDigits: 0,
-        }).format(amount);
+        return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(amount);
       }
 
       function toggleCategory(key) {
@@ -364,10 +245,7 @@
         let product = null;
         for (let k in categories) {
           let found = categories[k].products.find((p) => p.id === pid);
-          if (found) {
-            product = found;
-            break;
-          }
+          if (found) { product = found; break; }
         }
         if (!product || product.outOfStock) return;
         const item = cart.find((i) => i.id === pid);
@@ -385,6 +263,11 @@
         renderApp();
       }
 
+      // Fungsi bantu untuk menyimpan inputan teks secara real-time
+      function syncInput(field, val) {
+        formData[field] = val;
+      }
+
       function handleLocationChange(kec, kel) {
         selectedKecamatan = kec;
         selectedKelurahan = kel;
@@ -394,40 +277,17 @@
 
       function generateOrderID() {
         const now = new Date();
-        return `GK-${now.getFullYear()}${
-          now.getMonth() + 1
-        }${now.getDate()}-${now.getHours()}${now.getMinutes()}`;
+        return `GK-${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}-${now.getHours()}${now.getMinutes()}`;
       }
 
       function sendToWhatsApp(e) {
         e.preventDefault();
-        const f = e.target;
         const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
         const total = subtotal + currentShippingFee;
-        let msg = `*PESANAN BARU - ${
-          config.store_title
-        }*\n🆔 *ID:* ${generateOrderID()}\n\n*Item:*\n`;
-        cart.forEach(
-          (i) =>
-            (msg += `• ${i.name} (x${i.qty}) - ${formatCurrency(
-              i.price * i.qty
-            )}\n`)
-        );
-        msg += `\nSubtotal: ${formatCurrency(
-          subtotal
-        )}\nOngkir: ${formatCurrency(
-          currentShippingFee
-        )}\n*Total: ${formatCurrency(total)}*\n\n*Data:* ${f.name.value} (${
-          f.phone.value
-        })\n*Alamat:* ${selectedKelurahan}, ${selectedKecamatan}\n${
-          f.address.value
-        }`;
-        window.open(
-          `https://wa.me/${config.whatsapp_number}?text=${encodeURIComponent(
-            msg
-          )}`,
-          "_blank"
-        );
+        let msg = `*PESANAN BARU - ${config.store_title}*\n🆔 *ID:* ${generateOrderID()}\n\n*Item:*\n`;
+        cart.forEach(i => (msg += `• ${i.name} (x${i.qty}) - ${formatCurrency(i.price * i.qty)}\n`));
+        msg += `\nSubtotal: ${formatCurrency(subtotal)}\nOngkir: ${formatCurrency(currentShippingFee)}\n*Total: ${formatCurrency(total)}*\n\n*Data:* ${formData.name} (${formData.phone})\n*Alamat:* ${selectedKelurahan}, ${selectedKecamatan}\n${formData.address}`;
+        window.open(`https://wa.me/${config.whatsapp_number}?text=${encodeURIComponent(msg)}`, "_blank");
       }
 
       function renderApp() {
@@ -440,67 +300,42 @@
             <div class="inline-block bg-purple-100 text-purple-700 px-4 py-1 rounded-full text-[10px] sm:text-xs font-bold mb-3 tracking-wide uppercase">
               🕒 Buka: ${config.opening_hours_text}
             </div>
-            <h1 class="text-3xl sm:text-5xl font-extrabold text-purple-900 mb-2">${
-              config.store_title
-            }</h1>
-            <p class="text-gray-500 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">${
-              config.store_address
-            }</p>
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-purple-900 mb-2">${config.store_title}</h1>
+            <p class="text-gray-500 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">${config.store_address}</p>
           </header>
 
           <div class="space-y-4 sm:space-y-8">
-            ${Object.keys(categories)
-              .map((key) => {
+            ${Object.keys(categories).map((key) => {
                 const cat = categories[key];
                 const isOpen = openCategories[key];
-                const availableProducts = cat.products.filter(
-                  (p) => !p.outOfStock
-                );
+                const availableProducts = cat.products.filter((p) => !p.outOfStock);
                 if (availableProducts.length === 0) return "";
                 return `
                 <div class="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                   <div onclick="toggleCategory('${key}')" class="p-4 sm:p-6 bg-white flex justify-between items-center cursor-pointer hover:bg-purple-50 transition relative z-20">
                     <div class="flex items-center gap-3 sm:gap-4">
-                      <div class="w-10 h-10 sm:w-14 sm:h-14 bg-purple-100 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-3xl">
-                        ${cat.icon || "🥤"}
-                      </div>
+                      <div class="w-10 h-10 sm:w-14 sm:h-14 bg-purple-100 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-3xl">${cat.icon || "🥤"}</div>
                       <div>
-                        <h2 class="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">${
-                          cat.name
-                        }</h2>
-                        <span class="text-[9px] sm:text-[11px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                          ${availableProducts.length} Menu
-                        </span>
+                        <h2 class="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">${cat.name}</h2>
+                        <span class="text-[9px] sm:text-[11px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded-md uppercase tracking-wider">${availableProducts.length} Menu</span>
                       </div>
                     </div>
                     <div class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-gray-50 rounded-full">
-                      <svg class="rotate-icon ${
-                        isOpen ? "open" : ""
-                      } text-gray-400" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                      <svg class="rotate-icon ${isOpen ? "open" : ""} text-gray-400" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                   </div>
-                  <div class="category-content ${
-                    isOpen ? "open" : ""
-                  } px-3 sm:px-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-                    ${availableProducts
-                      .map((p) => {
+                  <div class="category-content ${isOpen ? "open" : ""} px-3 sm:px-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+                    ${availableProducts.map((p) => {
                         const inCart = cart.find((i) => i.id === p.id);
                         return `
                         <div class="product-card border border-gray-100 rounded-2xl p-2 sm:p-4 text-center bg-white">
                           <div class="w-full aspect-square overflow-hidden rounded-xl mb-3 flex items-center justify-center bg-gray-50">
-                            <img src="${
-                              p.image
-                            }" class="max-h-full max-w-full object-contain" onerror="this.src='https://placehold.co/400x400/5b21b6/ffffff?text=Menu'">
+                            <img src="${p.image}" class="max-h-full max-w-full object-contain" onerror="this.src='https://placehold.co/400x400/5b21b6/ffffff?text=Menu'">
                           </div>
-                          <h3 class="text-[10px] sm:text-sm font-bold h-7 sm:h-10 overflow-hidden mb-1 text-gray-800 uppercase leading-tight">${
-                            p.name
-                          }</h3>
-                          <p class="text-purple-700 font-extrabold text-xs sm:text-lg mb-3">${formatCurrency(
-                            p.price
-                          )}</p>
-                          ${
-                            inCart
-                              ? `<div class="flex items-center justify-between bg-purple-50 rounded-xl p-1">
+                          <h3 class="text-[10px] sm:text-sm font-bold h-7 sm:h-10 overflow-hidden mb-1 text-gray-800 uppercase leading-tight">${p.name}</h3>
+                          <p class="text-purple-700 font-extrabold text-xs sm:text-lg mb-3">${formatCurrency(p.price)}</p>
+                          ${inCart ? `
+                              <div class="flex items-center justify-between bg-purple-50 rounded-xl p-1">
                                 <button onclick="updateQty(${p.id}, -1)" class="w-7 h-7 sm:w-9 sm:h-9 bg-purple-600 text-white rounded-lg font-bold shadow-md hover:bg-purple-700 transition">-</button>
                                 <span class="font-bold text-purple-900 text-sm sm:text-base">${inCart.qty}</span>
                                 <button onclick="updateQty(${p.id}, 1)" class="w-7 h-7 sm:w-9 sm:h-9 bg-purple-600 text-white rounded-lg font-bold shadow-md hover:bg-purple-700 transition">+</button>
@@ -508,17 +343,13 @@
                               : `<button onclick="addToCart(${p.id})" class="w-full py-2 sm:py-3 bg-purple-600 text-white rounded-xl text-[10px] sm:text-xs font-bold shadow-lg shadow-purple-100 hover:bg-purple-700 transition active:scale-95">Tambah</button>`
                           }
                         </div>`;
-                      })
-                      .join("")}
+                      }).join("")}
                   </div>
                 </div>`;
-              })
-              .join("")}
+              }).join("")}
           </div>
 
-          ${
-            cart.length > 0
-              ? `
+          ${cart.length > 0 ? `
             <div class="mt-12 sm:mt-20 bg-white p-5 sm:p-10 rounded-3xl sm:rounded-[3rem] shadow-2xl border border-gray-100 max-w-3xl mx-auto">
               <div class="text-center mb-8">
                 <span class="text-4xl">🛍️</span>
@@ -530,11 +361,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div class="space-y-2">
                     <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Nama Penerima</label>
-                    <input type="text" name="name" placeholder="Siapa yang menerima?" required class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
+                    <input type="text" name="name" value="${formData.name}" oninput="syncInput('name', this.value)" placeholder="Siapa yang menerima?" required class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
                   </div>
                   <div class="space-y-2">
                     <label class="text-xs font-bold text-gray-500 ml-1 uppercase">No. WhatsApp</label>
-                    <input type="tel" name="phone" placeholder="Contoh: 0812..." required class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
+                    <input type="tel" name="phone" value="${formData.phone}" oninput="syncInput('phone', this.value)" placeholder="Contoh: 0812..." required class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
                   </div>
                 </div>
                 
@@ -543,59 +374,31 @@
                       <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Kecamatan</label>
                       <select onchange="handleLocationChange(this.value, '')" required class="w-full p-4 border border-gray-100 rounded-2xl bg-gray-50 outline-none focus:border-purple-600 transition text-sm sm:text-base cursor-pointer">
                         <option value="">-- Pilih --</option>
-                        ${Object.keys(locationData)
-                          .map(
-                            (k) =>
-                              `<option value="${k}" ${
-                                selectedKecamatan === k ? "selected" : ""
-                              }>${k}</option>`
-                          )
-                          .join("")}
+                        ${Object.keys(locationData).map(k => `<option value="${k}" ${selectedKecamatan === k ? "selected" : ""}>${k}</option>`).join("")}
                       </select>
                     </div>
                     <div class="space-y-2">
                       <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Kelurahan</label>
-                      <select onchange="handleLocationChange(selectedKecamatan, this.value)" ${
-                        !selectedKecamatan ? "disabled" : ""
-                      } required class="w-full p-4 border border-gray-100 rounded-2xl bg-gray-50 outline-none focus:border-purple-600 transition disabled:opacity-50 text-sm sm:text-base cursor-pointer">
+                      <select onchange="handleLocationChange(selectedKecamatan, this.value)" ${!selectedKecamatan ? "disabled" : ""} required class="w-full p-4 border border-gray-100 rounded-2xl bg-gray-50 outline-none focus:border-purple-600 transition disabled:opacity-50 text-sm sm:text-base cursor-pointer">
                         <option value="">-- Pilih --</option>
-                        ${
-                          selectedKecamatan
-                            ? Object.keys(locationData[selectedKecamatan])
-                                .map(
-                                  (kel) =>
-                                    `<option value="${kel}" ${
-                                      selectedKelurahan === kel
-                                        ? "selected"
-                                        : ""
-                                    }>${kel}</option>`
-                                )
-                                .join("")
-                            : ""
-                        }
+                        ${selectedKecamatan ? Object.keys(locationData[selectedKecamatan]).map(kel => `<option value="${kel}" ${selectedKelurahan === kel ? "selected" : ""}>${kel}</option>`).join("") : ""}
                       </select>
                     </div>
                 </div>
                 
                 <div class="space-y-2">
                   <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Alamat Lengkap</label>
-                  <textarea name="address" placeholder="Tulis nama jalan, nomor rumah, atau patokan warna pagar..." required class="w-full p-4 border border-gray-100 rounded-2xl outline-none h-28 focus:border-purple-600 bg-gray-50 resize-none transition text-sm sm:text-base"></textarea>
+                  <textarea name="address" oninput="syncInput('address', this.value)" placeholder="Tulis nama jalan, nomor rumah, atau patokan warna pagar..." required class="w-full p-4 border border-gray-100 rounded-2xl outline-none h-28 focus:border-purple-600 bg-gray-50 resize-none transition text-sm sm:text-base">${formData.address}</textarea>
                 </div>
 
                 <div class="bg-gray-900 p-6 sm:p-8 rounded-[2rem] text-white shadow-xl mt-8">
                   <div class="space-y-2 mb-6 border-b border-gray-800 pb-6">
-                    <div class="flex justify-between text-xs sm:text-sm text-gray-400"><span>Produk</span><span>${formatCurrency(
-                      subtotal
-                    )}</span></div>
-                    <div class="flex justify-between text-xs sm:text-sm text-gray-400"><span>Ongkos Kirim</span><span>${formatCurrency(
-                      currentShippingFee
-                    )}</span></div>
+                    <div class="flex justify-between text-xs sm:text-sm text-gray-400"><span>Produk</span><span>${formatCurrency(subtotal)}</span></div>
+                    <div class="flex justify-between text-xs sm:text-sm text-gray-400"><span>Ongkos Kirim</span><span>${formatCurrency(currentShippingFee)}</span></div>
                   </div>
                   <div class="flex justify-between font-extrabold text-xl sm:text-3xl items-center">
                     <span>Total</span>
-                    <span class="text-yellow-400">${formatCurrency(
-                      total
-                    )}</span>
+                    <span class="text-yellow-400">${formatCurrency(total)}</span>
                   </div>
                 </div>
 
@@ -604,19 +407,15 @@
                 </button>
               </form>
             </div>`
-              : `
+            : `
             <div class="mt-12 p-12 text-center border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-300 max-w-lg mx-auto">
                <div class="text-6xl mb-4 opacity-20">🥤</div>
                <p class="font-bold text-lg uppercase tracking-widest">Keranjang Kosong</p>
                <p class="text-sm">Pilih minuman favoritmu di atas!</p>
-            </div>
-          `
+            </div>`
           }
-          
           <footer class="mt-20 text-center text-gray-400 text-[10px] sm:text-xs uppercase tracking-[0.2em] pb-10">
-            &copy; 2026 ${
-              config.store_title
-            } &bull; Padang Sidempuan &bull; Powered by Goklat 945
+            &copy; 2026 ${config.store_title} &bull; Padang Sidempuan &bull; Powered by Goklat 945
           </footer>
         </div>`;
       }
