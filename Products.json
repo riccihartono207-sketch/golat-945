@@ -84,7 +84,7 @@
         "name": "DARK COCO",
         "price": 8000,
         "image": "https://i.ibb.co.com/gLQzDVJz/DARK-COCO.png",
-        "outOfStock": false
+        "outOfStock": true
       },
       {
         "id": 13,
@@ -339,3 +339,4 @@
     ]
   }
 }
+
