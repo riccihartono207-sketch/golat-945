@@ -26,7 +26,7 @@
         "name": "CREAMY MILK TEA",
         "price": 5000,
         "image": "https://i.ibb.co.com/xtcYPhF6/CREAMY-MILK-TEA.png",
-        "outOfStock": true
+        //"outOfStock": true
       },
       {
         "id": 5,
