@@ -7,19 +7,22 @@
         "id": 1,
         "name": "APPLE TEA",
         "price": 5000,
-        "image": "https://i.ibb.co.com/3yQp78w0/APPLE-TEA.png"
+        "image": "https://i.ibb.co.com/3yQp78w0/APPLE-TEA.png",
+        "outOfStock": false
       },
       {
         "id": 2,
         "name": "VANILA TEA",
         "price": 5000,
-        "image": "https://i.ibb.co.com/cG7mp47/VANILA-TEA.png"
+        "image": "https://i.ibb.co.com/cG7mp47/VANILA-TEA.png",
+        "outOfStock": false
       },
       {
         "id": 3,
         "name": "BLACKCURRANT TEA",
         "price": 5000,
-        "image": "https://i.ibb.co.com/jZDw7TDm/BLACKCURRANT-TEA.png"
+        "image": "https://i.ibb.co.com/jZDw7TDm/BLACKCURRANT-TEA.png",
+        "outOfStock": false
       },
       {
         "id": 4,
@@ -32,7 +35,8 @@
         "id": 5,
         "name": "JASMINE TEA",
         "price": 5000,
-        "image": "https://i.ibb.co.com/RGrKrRyd/JASMINE-TEA.png"
+        "image": "https://i.ibb.co.com/RGrKrRyd/JASMINE-TEA.png",
+        "outOfStock": false
       },
       {
         "id": 6,
@@ -52,13 +56,15 @@
         "id": 8,
         "name": "LYCHEE TEA",
         "price": 5000,
-        "image": "https://i.ibb.co.com/YBV02Fxd/LYCHEE-TEA.png"
+        "image": "https://i.ibb.co.com/YBV02Fxd/LYCHEE-TEA.png",
+        "outOfStock": false
       },
       {
         "id": 9,
         "name": "MANGO TEA",
         "price": 5000,
-        "image": "https://i.ibb.co.com/d3jxM16/MANGO-TEA.png"
+        "image": "https://i.ibb.co.com/d3jxM16/MANGO-TEA.png",
+        "outOfStock": false
       },
       {
         "id": 10,
@@ -71,7 +77,8 @@
         "id": 11,
         "name": "PEACH TEA",
         "price": 5000,
-        "image": "https://i.ibb.co.com/KjxnMWxP/PEACH-TEA.png"
+        "image": "https://i.ibb.co.com/KjxnMWxP/PEACH-TEA.png",
+        "outOfStock": false
       }
     ]
   },
@@ -339,4 +346,3 @@
     ]
   }
 }
-
