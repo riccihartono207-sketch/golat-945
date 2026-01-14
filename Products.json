@@ -15,14 +15,14 @@
         "name": "VANILA TEA",
         "price": 5000,
         "image": "https://i.ibb.co.com/cG7mp47/VANILA-TEA.png",
-        "outOfStock": false
+        "outOfStock": true
       },
       {
         "id": 3,
         "name": "BLACKCURRANT TEA",
         "price": 5000,
         "image": "https://i.ibb.co.com/jZDw7TDm/BLACKCURRANT-TEA.png",
-        "outOfStock": false
+        "outOfStock": true
       },
       {
         "id": 4,
@@ -346,3 +346,4 @@
     ]
   }
 }
+
