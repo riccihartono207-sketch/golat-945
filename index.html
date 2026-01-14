@@ -22,11 +22,9 @@
         0% {
           transform: translate(0, 0px);
         }
-
         50% {
           transform: translate(0, 15px);
         }
-
         100% {
           transform: translate(0, -0px);
         }
@@ -99,13 +97,11 @@
         0% {
           transform: rotate(0deg);
         }
-
         100% {
           transform: rotate(360deg);
         }
       }
 
-      /* Modal Animation */
       .modal-enter {
         animation: modalBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
@@ -115,18 +111,15 @@
           opacity: 0;
           transform: scale(0.8) translateY(20px);
         }
-
         100% {
           opacity: 1;
           transform: scale(1) translateY(0);
         }
       }
 
-      /* Hide Scrollbar for Chrome, Safari and Opera */
       ::-webkit-scrollbar {
         display: none;
       }
-
       html {
         -ms-overflow-style: none;
         scrollbar-width: none;
@@ -158,17 +151,20 @@
             </p>
           </div>
           <div class="flex flex-col gap-3">
+            <!-- Tombol Utama -->
             <button
               onclick="location.reload()"
               class="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-lg shadow-purple-200 transition-all active:scale-95 text-sm sm:text-base"
             >
               🔄 Reload Halaman
             </button>
+
+            <!-- Tombol Sekunder (DIPERJELAS) -->
             <button
               onclick="closeModal()"
-              class="w-full py-2 text-gray-400 hover:text-gray-600 font-semibold transition-colors text-sm"
+              class="w-full py-3 bg-white border-2 border-purple-100 text-purple-600 hover:bg-purple-50 hover:border-purple-200 font-bold rounded-2xl transition-all active:scale-95 text-sm sm:text-base"
             >
-              Order Sekarang(Close)
+              Lanjut Order Sekarang
             </button>
           </div>
         </div>
@@ -185,15 +181,7 @@
     </div>
 
     <script>
-      // ============================================================
-      // PENGATURAN TUTUP MENDADAK
-      // BUKA =false
-      // TUTUP = true
-
-      // ============================================================
       const tutupMendadak = false;
-      // ============================================================
-
       const config = {
         store_title: "Goklat 954",
         store_address: "Batang Ayumi Julu, Padang Sidempuan Utara",
@@ -273,6 +261,7 @@
           Simasom: 12000,
         },
       };
+
       let formState = {
         name: "",
         phone: "",
@@ -354,14 +343,9 @@
                 <p class="text-gray-500 text-xs sm:text-sm font-medium">Sampai jumpa di hari berikutnya! Kami akan segera kembali melayani pesanan Anda.</p>
                 <p class="text-gray-500 text-xs sm:text-sm font-medium">Buka Senin-jumat | Pukul 09.00-17.00.</p>
               </div>
-              <div class="flex justify-center gap-2 mt-6 sm:mt-8">
-                <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-600"></div>
-                <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-400"></div>
-                <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-200"></div>
-              </div>
             </div>
             <div class="bg-purple-900 py-3 sm:py-4 text-center">
-              <p class="text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase">${config.store_title} - Padang Sidempuan (Depan UMTS)</p>
+              <p class="text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase">${config.store_title} - Padang Sidempuan</p>
             </div>
           </div>
         `;
@@ -543,69 +527,64 @@
               <div class="text-center mb-8">
                 <span class="text-4xl">🛍️</span>
                 <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-2">Selesaikan Pesanan</h3>
-                <p class="text-gray-400 text-sm">Silahkan lengkapi data pengantaran anda</p>
               </div>
               
               <form onsubmit="sendToWhatsApp(event)" class="space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="space-y-2"> <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Nama Penerima</label> 
-                      <input type="text" name="name" value="${
-                        formState.name || ""
-                      }" oninput="formState.name = this.value" placeholder="Siapa yang menerima?" required class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
-                    </div>
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Nama Penerima</label> 
+                    <input type="text" name="name" value="${
+                      formState.name || ""
+                    }" oninput="formState.name = this.value" placeholder="Siapa yang menerima?" required class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
+                  </div>
                   <div class="space-y-2">
                     <label class="text-xs font-bold text-gray-500 ml-1 uppercase">No. WhatsApp</label>
                     <input type="tel" name="phone" value="${
                       formState.phone || ""
-                    }"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, ''); formState.phone = this.value"
-                        placeholder="Contoh: 0812..." required
-                        class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
-                </div>
+                    }" oninput="this.value = this.value.replace(/[^0-9]/g, ''); formState.phone = this.value" placeholder="Contoh: 0812..." required class="w-full p-4 border border-gray-100 rounded-2xl outline-none focus:border-purple-600 bg-gray-50 transition text-sm sm:text-base">
+                  </div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="space-y-2">
-                      <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Kecamatan</label>
-                      <select onchange="handleLocationChange(this.value, '')" required class="w-full p-4 border border-gray-100 rounded-2xl bg-gray-50 outline-none focus:border-purple-600 transition text-sm sm:text-base cursor-pointer">
-                        <option value="">-- Pilih --</option>
-                        ${Object.keys(locationData)
-                          .map(
-                            (k) =>
-                              `<option value="${k}" ${
-                                selectedKecamatan === k ? "selected" : ""
-                              }>${k}</option>`
-                          )
-                          .join("")}
-                      </select>
-                    </div>
-                    <div class="space-y-2">
-                      <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Kelurahan</label>
-                      <select onchange="handleLocationChange(selectedKecamatan, this.value)" ${
-                        !selectedKecamatan ? "disabled" : ""
-                      } required class="w-full p-4 border border-gray-100 rounded-2xl bg-gray-50 outline-none focus:border-purple-600 transition disabled:opacity-50 text-sm sm:text-base cursor-pointer">
-                        <option value="">-- Pilih --</option>
-                        ${
-                          selectedKecamatan
-                            ? Object.keys(locationData[selectedKecamatan])
-                                .map(
-                                  (kel) =>
-                                    `<option value="${kel}" ${
-                                      selectedKelurahan === kel
-                                        ? "selected"
-                                        : ""
-                                    }>${kel}</option>`
-                                )
-                                .join("")
-                            : ""
-                        }
-                      </select>
-                    </div>
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Kecamatan</label>
+                    <select onchange="handleLocationChange(this.value, '')" required class="w-full p-4 border border-gray-100 rounded-2xl bg-gray-50 outline-none focus:border-purple-600 transition text-sm sm:text-base cursor-pointer">
+                      <option value="">-- Pilih --</option>
+                      ${Object.keys(locationData)
+                        .map(
+                          (k) =>
+                            `<option value="${k}" ${
+                              selectedKecamatan === k ? "selected" : ""
+                            }>${k}</option>`
+                        )
+                        .join("")}
+                    </select>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Kelurahan</label>
+                    <select onchange="handleLocationChange(selectedKecamatan, this.value)" ${
+                      !selectedKecamatan ? "disabled" : ""
+                    } required class="w-full p-4 border border-gray-100 rounded-2xl bg-gray-50 outline-none focus:border-purple-600 transition disabled:opacity-50 text-sm sm:text-base cursor-pointer">
+                      <option value="">-- Pilih --</option>
+                      ${
+                        selectedKecamatan
+                          ? Object.keys(locationData[selectedKecamatan])
+                              .map(
+                                (kel) =>
+                                  `<option value="${kel}" ${
+                                    selectedKelurahan === kel ? "selected" : ""
+                                  }>${kel}</option>`
+                              )
+                              .join("")
+                          : ""
+                      }
+                    </select>
+                  </div>
                 </div>
                 
                 <div class="space-y-2">
                   <label class="text-xs font-bold text-gray-500 ml-1 uppercase">Alamat Lengkap</label>
-                  <textarea name="address" placeholder="Tulis nama jalan, nomor rumah, atau patokan warna pagar..." required class="w-full p-4 border border-gray-100 rounded-2xl outline-none h-28 focus:border-purple-600 bg-gray-50 resize-none transition text-sm sm:text-base"></textarea>
+                  <textarea name="address" placeholder="Tulis nama jalan, nomor rumah, atau patokan..." required class="w-full p-4 border border-gray-100 rounded-2xl outline-none h-28 focus:border-purple-600 bg-gray-50 resize-none transition text-sm sm:text-base"></textarea>
                 </div>
 
                 <div class="bg-gray-900 p-6 sm:p-8 rounded-[2rem] text-white shadow-xl mt-8">
@@ -630,19 +609,14 @@
                 </button>
               </form>
             </div>`
-              : `
-            <div class="mt-12 p-12 text-center border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-300 max-w-lg mx-auto">
+              : `<div class="mt-12 p-12 text-center border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-300 max-w-lg mx-auto">
                <div class="text-6xl mb-4 opacity-20">🥤</div>
                <p class="font-bold text-lg uppercase tracking-widest">Keranjang Kosong</p>
-               <p class="text-sm">Pilih minuman favoritmu di atas!</p>
-            </div>
-          `
+            </div>`
           }
           
           <footer class="mt-20 text-center text-gray-400 text-[10px] sm:text-xs uppercase tracking-[0.2em] pb-10">
-            &copy; 2026 ${
-              config.store_title
-            } &bull; Padang Sidempuan &bull; Powered by Goklat 954
+            &copy; 2026 ${config.store_title} &bull; Padang Sidempuan
           </footer>
         </div>`;
       }
