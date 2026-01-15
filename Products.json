@@ -182,7 +182,7 @@
         "name": "COCO ROCKY TIRAMISU",
         "price": 8000,
         "image": "https://i.ibb.co.com/qY2vkfPY/COCO-ROCKY-TIRAMISU.png",
-        "outOfStock": false 
+        "outOfStock": true
       },
       {
         "id": 26,
